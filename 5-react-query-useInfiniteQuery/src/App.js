@@ -2,32 +2,30 @@ import { useInfiniteQuery, useMutation, useQueryClient } from 'react-query';
 import './App.css';
 
 const fetchInfiniteUsers = async ({ pageParam = 1 }) => {
-  try {
-    return await (
-      await fetch(`https://reqres.in/api/users?page=${pageParam}`)
-    ).json();
-  } catch (err) {
-    throw new Error(err);
+  const response = await fetch(`https://reqres.in/api/users?page=${pageParam}`);
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
   }
+  return response.json();
 };
 
 const addUser = async user => {
-  try {
-    return await (
-      await fetch('https://reqres.in/api/users', {
-        method: 'POST',
-        body: JSON.stringify({
-          first_name: user.first_name,
-          last_name: user.last_name
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8'
-        }
-      })
-    ).json();
-  } catch (err) {
-    throw new Error(err);
+  const response = await fetch('https://reqres.in/api/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      first_name: user.first_name,
+      last_name: user.last_name
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
   }
+
+  return response.json();
 };
 
 function App() {

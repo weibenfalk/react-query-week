@@ -24,33 +24,33 @@ type Users = {
 };
 
 const fetchUsers = async (): Promise<Users> => {
-  try {
-    return await (await fetch('https://reqres.in/api/users')).json();
-  } catch (err) {
-    throw new Error(err);
+  const response = await fetch('https://reqres.in/api/users');
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
   }
+  return response.json();
 };
 
 const addUser = async (user: {
   first_name: string;
   last_name: string;
 }): Promise<Data> => {
-  try {
-    return await (
-      await fetch('https://reqres.in/api/users', {
-        method: 'POST',
-        body: JSON.stringify({
-          first_name: user.first_name,
-          last_name: user.last_name
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8'
-        }
-      })
-    ).json();
-  } catch (err) {
-    throw new Error(err);
+  const response = await fetch('https://reqres.in/api/users', {
+    method: 'POST',
+    body: JSON.stringify({
+      first_name: user.first_name,
+      last_name: user.last_name
+    }),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
   }
+
+  return response.json();
 };
 
 function App() {

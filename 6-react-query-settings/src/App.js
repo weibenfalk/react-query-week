@@ -2,11 +2,11 @@ import { useQuery } from 'react-query';
 import './App.css';
 
 const fetchUsers = async () => {
-  try {
-    return await (await fetch('https://reqres.in/api/users')).json();
-  } catch (err) {
-    throw new Error(err);
+  const response = await fetch('https://reqres.in/api/users');
+  if (!response.ok) {
+    throw new Error('Something went wrong!');
   }
+  return response.json();
 };
 
 const App = () => {
@@ -14,7 +14,7 @@ const App = () => {
   const { data, isLoading, error } = useQuery('users', fetchUsers, {
     enabled: true,
     refetchOnWindowFocus: false,
-    refetchInterval: false,
+    refetchInterval: false
   });
 
   if (isLoading) return <p>Loading ...</p>;
